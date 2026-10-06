@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080b10" />
+    <meta name="description" content="Afterdark — a sleek, fast, endlessly replayable Snake game." />
+    <title>Afterdark — Snake</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="glow glow-lime" aria-hidden="true"></div>
+    <div class="glow glow-violet" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Afterdark Snake home">
+        <span class="brand-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>SNAKE<small>/AFTERDARK</small></span>
+      </a>
+      <div class="header-actions">
+        <span class="live-status"><i></i> Arcade online</span>
+        <button class="sound-button" id="soundButton" type="button" aria-pressed="true">
+          <span aria-hidden="true">♪</span><span id="soundLabel">Sound on</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero" aria-labelledby="pageTitle">
+        <div>
+          <p class="eyebrow">Classic instinct <span></span> Electric appetite</p>
+          <h1 id="pageTitle">Stay hungry.<br /><em>Stay moving.</em></h1>
+        </div>
+        <p class="hero-copy">
+          Chase the signal. Grow the line. Don’t bite your own tail.
+          <span>Simple rules—until the tempo takes over.</span>
+        </p>
+      </section>
+
+      <section class="game-layout" aria-label="Snake game">
+        <div class="game-column">
+          <div class="game-hud">
+            <div class="score-block">
+              <span>Score</span>
+              <strong id="scoreValue">0000</strong>
+            </div>
+            <div class="hud-stat">
+              <span>Length</span>
+              <strong id="lengthValue">4</strong>
+            </div>
+            <div class="hud-stat">
+              <span>Fruit</span>
+              <strong id="fruitValue">0</strong>
+            </div>
+            <div class="combo-block" id="comboBlock">
+              <div><span>Combo</span><strong id="comboValue">×1</strong></div>
+              <div class="combo-track"><i id="comboBar"></i></div>
+            </div>
+            <button class="pause-button" id="pauseButton" type="button" disabled>
+              <span id="pauseIcon" aria-hidden="true">Ⅱ</span><span id="pauseLabel">Pause</span>
+            </button>
+          </div>
+
+          <div class="game-frame" id="gameFrame">
+            <span class="frame-label frame-label-top">GRID / 24 × 24</span>
+            <span class="frame-label frame-label-bottom">DON’T TOUCH THE EDGE</span>
+            <canvas
+              id="gameCanvas"
+              width="720"
+              height="720"
+              tabindex="0"
+              role="application"
+              aria-label="Snake game. Use arrow keys or W A S D to steer."
+            ></canvas>
+
+            <div class="game-overlay" id="gameOverlay">
+              <div class="overlay-orbit" aria-hidden="true"><span>◆</span></div>
+              <p id="overlayKicker">Ready when you are</p>
+              <h2 id="overlayTitle">Feed the signal.</h2>
+              <p id="overlayCopy">Use arrow keys or WASD to start</p>
+              <button class="primary-button" id="startButton" type="button">
+                Start game <span aria-hidden="true">→</span>
+              </button>
+            </div>
+
+            <div class="bonus-timer" id="bonusTimer" hidden>
+              <span>◆ Bonus signal</span><strong id="bonusTime">7.0</strong>
+            </div>
+          </div>
+
+          <div class="mobile-controls" aria-label="Touch controls">
+            <span></span>
+            <button type="button" data-direction="up" aria-label="Move up">↑</button>
+            <span></span>
+            <button type="button" data-direction="left" aria-label="Move left">←</button>
+            <button type="button" data-direction="down" aria-label="Move down">↓</button>
+            <button type="button" data-direction="right" aria-label="Move right">→</button>
+          </div>
+        </div>
+
+        <aside class="side-panel">
+          <section class="panel-section">
+            <p class="section-number">01 / Velocity</p>
+            <h2>Pick your pace</h2>
+            <div class="speed-picker" role="group" aria-label="Game speed">
+              <button type="button" data-speed="chill"><span>Chill</span><small>Easy</small></button>
+              <button class="active" type="button" data-speed="classic"><span>Classic</span><small>Medium</small></button>
+              <button type="button" data-speed="hyper"><span>Hyper</span><small>Fast</small></button>
+            </div>
+          </section>
+
+          <div class="panel-line"></div>
+
+          <section class="panel-section rules">
+            <p class="section-number">02 / Field notes</p>
+            <h2>Know the glow</h2>
+            <ul>
+              <li><span class="legend-dot fruit-dot"></span><p><strong>Signal fruit</strong><small>Grow one segment · +10 points</small></p></li>
+              <li><span class="legend-dot bonus-dot">◆</span><p><strong>Prism fruit</strong><small>Limited time · +75 points</small></p></li>
+              <li><span class="legend-dot combo-dot">×</span><p><strong>Combo window</strong><small>Eat quickly to multiply the score</small></p></li>
+            </ul>
+          </section>
+
+          <div class="record-card">
+            <div class="record-top">
+              <span>Personal record</span>
+              <i aria-hidden="true">↗</i>
+            </div>
+            <strong id="highScoreValue">0000</strong>
+            <div class="record-meta">
+              <span>Best run</span><span id="recordSpeed">No runs yet</span>
+            </div>
+          </div>
+
+          <div class="shortcut-grid">
+            <span><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> Steer</span>
+            <span><kbd>Space</kbd> Pause</span>
+            <span><kbd>R</kbd> Restart</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer>
+      <span>Built for one more run.</span>
+      <span>◆ AFTERDARK ARCADE · 2026</span>
+    </footer>
+
+    <div class="modal-backdrop" id="gameOverModal" hidden>
+      <section class="game-over-card" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
+        <div class="crash-mark" aria-hidden="true"><span></span><span></span></div>
+        <p class="modal-kicker">Signal interrupted</p>
+        <h2 id="gameOverTitle">Tail end.</h2>
+        <p id="gameOverCopy">The grid always gets its turn.</p>
+        <div class="final-score">
+          <span>Final score</span>
+          <strong id="finalScore">0000</strong>
+        </div>
+        <div class="final-stats">
+          <div><span>Fruit</span><strong id="finalFruit">0</strong></div>
+          <div><span>Length</span><strong id="finalLength">4</strong></div>
+          <div><span>Top combo</span><strong id="finalCombo">×1</strong></div>
+        </div>
+        <p class="new-record" id="newRecord" hidden>◆ New personal record</p>
+        <button class="primary-button wide" id="againButton" type="button">Run it back <span>↻</span></button>
+        <button class="text-button" id="closeModalButton" type="button">Return to grid</button>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
